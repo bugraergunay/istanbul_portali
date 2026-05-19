@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>İstanbul Tanıtım Portalı | Buğra Ergünay</title>
+    
+    <meta name="description" content="Buğra Ergünay tarafından geliştirilen premium İstanbul şehir portalı. Canlı ulaşım, anlık yoğunluk haritası, tehlike uyarıları ve akıllı rota planlayıcı.">
+    <meta name="keywords" content="İstanbul, İstanbul Rehberi, Buğra Ergünay, Canlı Döviz, İstanbul Ulaşım, İstanbul Yoğunluk, Yol Tehlikeleri, EDS Limitleri, Rota Planlayıcı, Öneri Sistemi">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="İstanbul Tanıtım Portalı | Buğra Ergünay">
+    
+    <style>
+        /* Yazı Tipi Entegrasyonu */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        /* Genel Sıfırlama ve Yumuşak Renk Geçişleri */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; transition: background-color 0.3s ease, color 0.3s ease; }
+        
+        /* Özel Kaydırma Çubuğu Tasarımı */
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: var(--bg-track); }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(#ffcc00, #ff6600); border-radius: 5px; }
+
+        /* Koyu Tema Değişkenleri (Default) */
+        :root {
+            --bg-main: #0b0c10;
+            --bg-track: #050508;
+            --text-main: #fff;
+            --text-sub: #e0e0e0;
+            --card-bg: rgba(255, 255, 255, 0.02);
+            --card-border: rgba(255, 255, 255, 0.05);
+            --panel-bg: linear-gradient(145deg, rgba(255, 255, 255, 0.03), rgba(0, 0, 0, 0.4));
+            --input-bg: rgba(0, 0, 0, 0.3);
+            --ibb-blue: #0d2c54;
+        }
+
+        /* Aydınlık Tema Değişkenleri */
+        [data-theme="light"] {
+            --bg-main: #f4f6f9;
+            --bg-track: #e4e7eb;
+            --text-main: #1a1a2e;
+            --text-sub: #4a4a6a;
+            --card-bg: #ffffff;
+            --card-border: rgba(0, 0, 0, 0.08);
+            --panel-bg: linear-gradient(145deg, #ffffff, #eaeef3);
+            --input-bg: #ffffff;
+            --ibb-blue: #1c3d75;
+        }
+
+        body { background-color: var(--bg-main); color: var(--text-main); overflow-x: hidden; line-height: 1.6; scroll-behavior: smooth; }
+
+        /* Üst Kontrol Paneli & Yerel Saat */
+        .top-controls {
+            position: absolute;
+            top: 25px;
+            right: 25px;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 10px 20px;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 204, 0, 0.3);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+        .local-time-box {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border-right: 1px solid rgba(255,255,255,0.2);
+            padding-right: 15px;
+            color: #ffcc00;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        .lang-label { font-size: 0.8rem; color: #ffcc00; font-weight: 600; text-transform: uppercase; }
+        .lang-select { background: transparent; border: none; color: #fff; font-size: 0.95rem; font-weight: 600; cursor: pointer; outline: none; }
+        .lang-select option { background: #000; color: #fff; }
+        .theme-toggle-btn { background: rgba(255, 254, 250, 0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 4px 10px; border-radius: 20px; font-size: 0.85rem; cursor: pointer; font-weight: 600; }
+        .theme-toggle-btn:hover { background: #ffcc00; color: #000; }
+
+        /* Finansal Döviz Şeridi ve Çevirici */
+        .ticker-wrap { width: 100%; background: rgba(255, 204, 0, 0.06); border-bottom: 1px solid rgba(255, 204, 0, 0.15); padding: 10px 0; overflow: hidden; }
+        .ticker { display: flex; justify-content: center; gap: 40px; font-size: 0.9rem; font-weight: 600; }
+        .ticker-item { display: flex; align-items: center; gap: 8px; }
+        .ticker-item .up { color: #00e5ff; }
+
+        .converter-panel { max-width: 500px; margin: 15px auto; background: var(--card-bg); border: 1px solid var(--card-border); padding: 15px; border-radius: 12px; display: flex; gap: 10px; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        .converter-panel input, .converter-panel select { padding: 8px 12px; background: var(--input-bg); border: 1px solid var(--card-border); color: var(--text-main); border-radius: 6px; outline: none; font-size: 0.9rem; }
+        .converter-result { font-weight: 600; color: #ffcc00; font-size: 0.95rem; min-width: 120px; text-align: center; }
+
+        /* Hero Slider Konteyneri */
+        .slider-container { position: relative; width: 100%; height: 90vh; overflow: hidden; background: #000; }
+        .slide { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; transition: opacity 1.5s ease-in-out; background-size: cover; background-position: center; background-repeat: no-repeat; }
+        .slide.active { opacity: 1; }
+        .slide::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(11, 12, 16, 0.85)); z-index: 2; }
+
+        /* Slider Üzerindeki Karşılama Yazıları */
+        .overlay-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; color: #fff; z-index: 10; width: 85%; }
+        .welcome-text { font-size: clamp(1rem, 2vw, 1.4rem); font-weight: 500; color: #ffcc00; text-transform: uppercase; letter-spacing: 4px; margin-bottom: 10px; display: block; }
+        .overlay-text h1 { font-size: clamp(3rem, 8vw, 6.5rem); letter-spacing: 12px; font-weight: 700; margin-bottom: 15px; }
+        .overlay-text p { font-size: clamp(1.1rem, 2.2vw, 1.8rem); font-weight: 400; margin-bottom: 12px; }
+        .overlay-text .sub-title { font-size: clamp(1.1rem, 2.2vw, 1.7rem); font-weight: 600; color: #ffcc00; margin-bottom: 12px; }
+        .overlay-text .desc-text { font-size: clamp(0.9rem, 1.5vw, 1.2rem); font-weight: 300; color: #e0e0e0; max-width: 700px; margin: 0 auto; }
+
+        /* Slider Navigasyon Noktaları */
+        .dots { position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; z-index: 20; background: rgba(0, 0, 0, 0.7); padding: 10px 15px; border-radius: 30px; border: 1px solid rgba(255, 204, 0, 0.2); }
+        .dot { width: 8px; height: 8px; background: rgba(255,255,255,0.3); border-radius: 50%; cursor: pointer; }
+        .dot.active { background: #ffcc00; transform: scale(1.4); box-shadow: 0 0 10px #ffcc00; }
+
+        /* İçerik Düzeni */
+        .main-content { max-width: 1200px; margin: 0 auto; padding: 60px 20px; }
+        .section-title { font-size: 2.3rem; color: #ffcc00; margin-bottom: 40px; text-align: center; position: relative; font-weight: 700; }
+        .section-title::after { content: ''; display: block; width: 70px; height: 4px; background: linear-gradient(90deg, #ffcc00, #ff6600); margin: 15px auto 0 auto; border-radius: 2px; }
+
+        /* İstatistik Kartları Grid Yapısı */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; margin-bottom: 40px; }
+        .stat-card { background: var(--card-bg); border: 1px solid var(--card-border); padding: 40px 30px; border-radius: 16px; text-align: center; }
+        .stat-card .number { font-size: 3.5rem; font-weight: 700; background: linear-gradient(135deg, #ffcc00, #ff8800); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        /* Ziyaretçi Paneli */
+        .visit-info-wrapper { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-bottom: 35px; }
+        .live-counter { background: rgba(0, 229, 255, 0.08); border: 1px solid rgba(0, 229, 255, 0.2); padding: 12px 25px; border-radius: 30px; display: inline-flex; align-items: center; gap: 10px; font-size: 0.95rem; color: #00e5ff; }
+        .live-dot { width: 8px; height: 8px; background-color: #00e5ff; border-radius: 50%; animation: pulse 1.5s infinite; box-shadow: 0 0 8px #00e5ff; }
+        .total-counter-panel { background: rgba(255, 204, 0, 0.08); border: 1px solid rgba(255, 204, 0, 0.2); padding: 12px 25px; border-radius: 30px; display: inline-flex; align-items: center; gap: 10px; font-size: 0.95rem; color: #ffcc00; }
+
+        /* Şehir Künye Paneli */
+        .city-info-panel { background: var(--panel-bg); border: 1px solid rgba(255, 204, 0, 0.15); padding: 30px; border-radius: 20px; margin-bottom: 30px; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 25px; }
+        .info-box { display: flex; flex-direction: column; gap: 5px; padding: 10px; border-left: 3px solid rgba(255, 204, 0, 0.4); padding-left: 15px; }
+        .info-value { font-size: 1.1rem; font-weight: 600; }
+        .info-value.highlight { color: #ffcc00; }
+
+        /* Canlı Trafik ve Yol Çalışmaları Bildirimleri */
+        .traffic-alerts-section { background: rgba(255, 165, 0, 0.03); border: 1px solid rgba(255, 165, 0, 0.15); padding: 35px; border-radius: 20px; margin-bottom: 40px; }
+        .traffic-grid-layout { display: grid; grid-template-columns: 1fr; gap: 25px; margin-top: 20px; }
+        @media (min-width: 992px) { .traffic-grid-layout { grid-template-columns: 1fr 1fr; } }
+        
+        .traffic-subheading { color: #ffcc00; font-size: 1.1rem; font-weight: 600; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 5px; }
+        .alert-card { background: var(--card-bg); border: 1px solid var(--card-border); padding: 15px; border-radius: 12px; display: flex; gap: 15px; align-items: flex-start; border-left: 4px solid #ffaa00; margin-bottom: 12px; }
+        .alert-card.danger-road { border-left-color: #e53935; background: rgba(229, 57, 53, 0.03); }
+        .alert-icon { font-size: 1.6rem; line-height: 1; }
+        .alert-details h4 { color: #ffcc00; font-size: 0.95rem; margin-bottom: 3px; font-weight: 600; }
+        .alert-details p { font-size: 0.85rem; color: var(--text-sub); margin-bottom: 4px; }
+        .alert-location { font-size: 0.75rem; background: rgba(255,255,255,0.05); padding: 2px 8px; border-radius: 4px; display: inline-block; color: #00e5ff; font-weight: 500; }
+        
+        /* Yoğunluk Çubuğu (Progress Bar) */
+        .density-bar-container { width: 100%; background: rgba(255,255,255,0.05); height: 8px; border-radius: 4px; overflow: hidden; margin-top: 5px; }
+        .density-bar { height: 100%; border-radius: 4px; transition: width 0.5s ease; }
+        .density-text { font-size: 0.8rem; font-weight: 600; float: right; margin-top: -22px; }
+
+        /* Resmî Kurum Kartları Tasarımı */
+        .official-institutions { display: grid; grid-template-columns: 1fr; gap: 20px; margin-bottom: 40px; }
+        @media (min-width: 768px) { .official-institutions { grid-template-columns: repeat(2, 1fr); } }
+        
+        .ibb-btn-container { display: flex; flex-direction: column; justify-content: center; }
+        .ibb-link-btn { display: inline-flex; align-items: center; justify-content: center; gap: 15px; background: var(--ibb-blue); color: #ffffff; border: 2px solid #ffcc00; padding: 18px 24px; border-radius: 14px; text-decoration: none; font-weight: 700; font-size: 1.1rem; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+        .ibb-link-btn:hover { background: #ffcc00; color: #0d2c54; transform: translateY(-3px); box-shadow: 0 6px 20px rgba(255, 204, 0, 0.4); }
+        .ibb-logo-container { width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .ibb-logo-svg { width: 100%; height: 100%; fill: currentColor; }
+
+        .other-institutions-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; }
+        .inst-card { background: var(--card-bg); border: 1px solid var(--card-border); padding: 15px; border-radius: 12px; text-decoration: none; color: var(--text-main); display: flex; flex-direction: column; gap: 5px; border-left: 3px solid #00e5ff; transition: all 0.2s; }
+        .inst-card:hover { background: rgba(0, 229, 255, 0.05); transform: translateX(4px); }
+        .inst-title { font-size: 0.85rem; font-weight: 600; color: #ffcc00; }
+        .inst-name { font-size: 0.9rem; font-weight: 500; }
+
+        /* Acil Durum Numaraları Paneli */
+        .emergency-section { background: rgba(255, 68, 68, 0.03); border: 1px solid rgba(255, 68, 68, 0.15); padding: 30px; border-radius: 20px; margin-bottom: 50px; }
+        .emergency-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 20px; margin-top: 20px; }
+        .emergency-card { background: var(--card-bg); border: 1px solid var(--card-border); border-top: 4px solid #ff4444; padding: 20px; border-radius: 12px; text-align: center; text-decoration: none; color: var(--text-main); transition: transform 0.2s; display: flex; flex-direction: column; justify-content: center; min-height: 140px; }
+        .emergency-card:hover { transform: translateY(-4px); background: rgba(255, 68, 68, 0.05); }
+        .emergency-num { font-size: 2.2rem; font-weight: 800; color: #ff4444; margin-bottom: 5px; letter-spacing: 1px; }
+        .emergency-label { font-size: 0.9rem; font-weight: 600; color: var(--text-main); margin-bottom: 4px; }
+        .emergency-sublabel { font-size: 0.75rem; color: var(--text-sub); line-height: 1.3; }
+
+        /* Harita Modülü Küpü */
+        .map-section { background: var(--card-bg); border: 1px solid var(--card-border); padding: 35px; border-radius: 20px; margin-bottom: 70px; }
+        .map-container { width: 100%; height: auto; min-height: 400px; border-radius: 12px; overflow: hidden; border: 1px solid var(--card-border); background: #111; display: flex; align-items: center; justify-content: center; padding: 10px; }
+        .map-image { width: 100%; height: auto; max-height: 85vh; object-fit: contain; border-radius: 8px; }
+
+        /* Hız Kuralları, EDS ve İnteraktif Limit Sorgulayıcı */
+        .eds-section { background: var(--card-bg); border: 1px solid var(--card-border); padding: 40px; border-radius: 20px; margin-bottom: 70px; }
+        
+        .speed-checker-box { background: rgba(255, 204, 0, 0.03); border: 1px solid rgba(255, 204, 0, 0.15); padding: 25px; border-radius: 16px; margin-top: 10px; display: flex; flex-direction: column; gap: 15px; }
+        .checker-controls { display: flex; gap: 15px; flex-wrap: wrap; }
+        .checker-select { flex: 1; min-width: 200px; padding: 12px; background: var(--input-bg); border: 1px solid var(--card-border); color: var(--text-main); border-radius: 8px; outline: none; }
+        .checker-display { display: flex; gap: 20px; background: rgba(0,0,0,0.4); padding: 15px; border-radius: 10px; border: 1px solid var(--card-border); justify-content: space-around; text-align: center; }
+        .speed-badge { font-size: 1.5rem; font-weight: 700; color: #ff4444; }
+
+        /* Akıllı Rota Planlayıcı */
+        .planner-section { background: var(--card-bg); border: 1px solid var(--card-border); padding: 40px; border-radius: 20px; margin-bottom: 70px; }
+        .planner-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 25px; }
+        .planner-select { width: 100%; padding: 15px; background: var(--input-bg); border: 1px solid var(--card-border); color: var(--text-main); border-radius: 10px; outline: none; cursor: pointer; }
+        .planner-btn { width: 100%; padding: 15px; background: linear-gradient(90deg, #ffcc00, #ff6600); border: none; color: #000; border-radius: 10px; font-weight: 600; cursor: pointer; }
+        .planner-result { margin-top: 30px; padding: 20px; background: rgba(0, 229, 255, 0.04); border: 1px solid rgba(0, 229, 255, 0.15); border-radius: 12px; display: none; }
+        .route-detail-title { color: #ffcc00; font-weight: 600; margin-bottom: 8px; font-size: 1.1rem; }
+        .route-info-badge { display: inline-block; background: rgba(0, 229, 255, 0.15); color: #00e5ff; padding: 3px 10px; border-radius: 6px; font-size: 0.85rem; margin-bottom: 10px; border: 1px solid rgba(0, 229, 255, 0.2); }
+
+        /* Ziyaretçi İnteraktif Anket Kartları */
+        .quiz-section { background: var(--card-bg); border: 1px solid var(--card-border); padding: 45px 30px; border-radius: 24px; margin-bottom: 50px; }
+        .polls-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-top: 30px; }
+        .poll-card { background: rgba(255,255,255,0.01); border: 1px solid var(--card-border); padding: 25px; border-radius: 20px; display: flex; flex-direction: column; justify-content: space-between; }
+        .poll-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 20px; text-align: center; min-height: 55px; color: var(--text-main); }
+        .poll-actions { display: flex; gap: 15px; justify-content: center; margin-bottom: 15px; }
+        .poll-vote-btn { padding: 12px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; border: none; flex: 1; font-size: 0.95rem; transition: transform 0.2s; }
+        .poll-vote-btn:hover { transform: scale(1.03); }
+        .poll-vote-btn.yes { background: #00e5ff; color: #000; } 
+        .poll-vote-btn.no { background: #ff4444; color: #fff; }
+        .poll-results { display: none; flex-direction: column; gap: 12px; }
+        .poll-bar-container { position: relative; width: 100%; background: rgba(255,255,255,0.05); height: 32px; border-radius: 6px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); }
+        .poll-bar { height: 100%; width: 0%; transition: width 1s cubic-bezier(0.1, 1, 0.1, 1); }
+        .poll-bar.yes-bar { background: linear-gradient(90deg, #00e5ff, #0088cc); }
+        .poll-bar.no-bar { background: linear-gradient(90deg, #ff4444, #cc0000); }
+        .poll-bar-text { position: absolute; top: 50%; left: 12px; transform: translateY(-50%); font-size: 0.85rem; font-weight: 600; color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,0.8); }
+
+        /* Eleştiri, Öneri ve Yıldızlı Yorum Sistemi */
+        .feedback-section { background: var(--card-bg); border: 1px solid var(--card-border); padding: 40px; border-radius: 20px; margin-bottom: 70px; }
+        .feedback-container { display: grid; grid-template-columns: 1fr; gap: 30px; margin-top: 25px; }
+        @media (min-width: 992px) { .feedback-container { grid-template-columns: 4fr 5fr; } }
+        
+        .feedback-form { background: rgba(255,255,255,0.01); border: 1px solid var(--card-border); padding: 25px; border-radius: 16px; display: flex; flex-direction: column; gap: 15px; height: fit-content; }
+        .feedback-input { width: 100%; padding: 12px; background: var(--input-bg); border: 1px solid var(--card-border); color: var(--text-main); border-radius: 8px; outline: none; font-size: 0.9rem; }
+        .feedback-textarea { width: 100%; padding: 12px; background: var(--input-bg); border: 1px solid var(--card-border); color: var(--text-main); border-radius: 8px; outline: none; font-size: 0.9rem; resize: vertical; min-height: 120px; }
+        
+        .star-rating-control { display: flex; align-items: center; gap: 5px; font-size: 1.6rem; color: rgba(255,255,255,0.2); }
+        .star-rating-control span { cursor: pointer; transition: transform 0.1s; }
+        .star-rating-control span:hover { transform: scale(1.2); }
+        .star-rating-control span.selected { color: #ffcc00; text-shadow: 0 0 10px rgba(255,204,0,0.4); }
+        
+        .feedback-submit-btn { width: 100%; padding: 12px; background: linear-gradient(90deg, #00e5ff, #0088cc); border: none; color: #000; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.95rem; }
+
+        .comments-feed { display: flex; flex-direction: column; gap: 15px; max-height: 500px; overflow-y: auto; padding-right: 10px; }
+        .comment-item { background: rgba(255,255,255,0.02); border: 1px solid var(--card-border); padding: 15px; border-radius: 12px; border-left: 4px solid #ffcc00; display: flex; flex-direction: column; gap: 6px; }
+        .comment-header { display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; }
+        .comment-user { font-weight: 600; color: #ffcc00; display: flex; align-items: center; gap: 6px; }
+        .comment-stars { color: #ffcc00; letter-spacing: 2px; }
+        .comment-text { font-size: 0.9rem; color: var(--text-sub); word-break: break-word; line-height: 1.5; }
+        
+        /* Çeviri Butonu Tasarımı */
+        .translate-comment-btn { background: rgba(0, 229, 255, 0.1); border: 1px solid rgba(0, 229, 255, 0.3); color: #00e5ff; padding: 3px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; cursor: pointer; margin-top: 5px; width: fit-content; align-self: flex-start; }
+        .translate-comment-btn:hover { background: #00e5ff; color: #000; }
+
+        /* Sayfa Alt Bilgisi */
+        footer { background: var(--bg-track); padding: 50px 20px; text-align: center; border-top: 1px solid rgba(255, 204, 0, 0.1); margin-top: 50px; }
+        .footer-note { color: #ffcc00; font-size: 1.1rem; margin-top: 15px; font-weight: 600; }
+        @keyframes pulse { 0%, 100% { transform: scale(0.8); opacity: 0.5; } 50% { transform: scale(1.3); opacity: 1; } }
+    </style>
+</head>
+<body>
+
+    <div class="top-controls">
+        <div class="local-time-box">
+            <span>🕒 IST:</span>
+            <span id="istanbulClock">00:00:00</span>
+        </div>
+        <button class="theme-toggle-btn" id="themeBtn" onclick="toggleTheme()">☀️ Gündüz</button>
+        <span class="lang-label" id="lblLangSelect">Dil / Language:</span>
+        <select class="lang-select" id="langSelect" onchange="changeLanguage(this.value)">
+            <option value="tr">TR (Türkçe)</option>
+            <option value="en">EN (English)</option>
+            <option value="de">DE (Deutsch)</option>
+            <option value="es">ES (Español)</option>
+        </select>
+    </div>
+
+    <div class="ticker-wrap">
+        <div class="ticker">
+            <div class="ticker-item">💵 USD/TRY: <span id="rate-usd" class="up">34.30 TRY</span></div>
+            <div class="ticker-item">💶 EUR/TRY: <span id="rate-eur" class="up">37.15 TRY</span></div>
+            <div class="ticker-item">💷 GBP/TRY: <span id="rate-gbp" class="up">43.45 TRY</span></div>
+        </div>
+        
+        <div class="converter-panel">
+            <input type="number" id="convAmount" value="100" oninput="calculateConversion()" placeholder="Miktar">
+            <select id="convType" onchange="calculateConversion()">
+                <option value="TL_USD">TRY ➡️ USD</option>
+                <option value="TL_EUR">TRY ➡️ EUR</option>
+                <option value="TL_GBP">TRY ➡️ GBP</option>
+                <option value="USD_TL">USD ➡️ TRY</option>
+                <option value="EUR_TL">EUR ➡️ TRY</option>
+            </select>
+            <div class="converter-result" id="convResult">...</div>
+        </div>
+    </div>
+
+    <div class="slider-container">
+        <div class="slide active" style="background-image: url('İstanbul1.png');"></div>
+        <div class="slide" style="background-image: url('İstanbul2.png');"></div>
+        <div class="slide" style="background-image: url('İstanbul3.png');"></div>
+        <div class="slide" style="background-image: url('İstanbul4.png');"></div>
+        <div class="slide" style="background-image: url('İstanbul5.png');"></div>
+        <div class="slide" style="background-image: url('İstanbul6.png');"></div>
+        <div class="slide" style="background-image: url('İstanbul7.png');"></div>
+        <div class="slide" style="background-image: url('İstanbul8.png');"></div>
+        <div class="slide" style="background-image: url('İstanbul9.png');"></div>
+        <div class="slide" style="background-image: url('İstanbul10.png');"></div>
+        <div class="slide" style="background-image: url('İstanbul11.jpg');"></div>
+
+        <div class="overlay-text">
+            <span class="welcome-text" id="slideWelcome">Portfolyo Projesi | Buğra Ergünay</span>
+            <h1 id="slideCityName">İSTANBUL</h1>
+            <p id="slideMainDesc">Yüzyılların Eskitemediği Kadim Şehir</p>
+            <div class="sub-title" id="slideLoveTitle">Âşık olunası şehir...</div>
+            <div class="desc-text" id="slideSubDesc">Yedi tepenin üstünde yükselen, şairlerin ilham kaynağı, her sokağı ayrı bir destan barındıran dünya mirası.</div>
+        </div>
+
+        <div class="dots">
+            <div class="dot active" onclick="currentSlideTo(0)"></div>
+            <div class="dot" onclick="currentSlideTo(1)"></div>
+            <div class="dot" onclick="currentSlideTo(2)"></div>
+            <div class="dot" onclick="currentSlideTo(3)"></div>
+            <div class="dot" onclick="currentSlideTo(4)"></div>
+            <div class="dot" onclick="currentSlideTo(5)"></div>
+            <div class="dot" onclick="currentSlideTo(6)"></div>
+            <div class="dot" onclick="currentSlideTo(7)"></div>
+            <div class="dot" onclick="currentSlideTo(8)"></div>
+            <div class="dot" onclick="currentSlideTo(9)"></div>
+            <div class="dot" onclick="currentSlideTo(10)"></div>
+        </div>
+    </div>
+
+    <main class="main-content">
+        
+        <div class="visit-info-wrapper">
+            <div class="total-counter-panel">
+                <span id="lblTotalCounter">📊 Toplam Ziyaret:</span>
+                <strong id="toplam-sayac">14.258</strong>
+            </div>
+            <div class="live-counter">
+                <div class="live-dot"></div>
+                <span id="lblLiveCounter">Şu anda <span id="liveUserCount">45</span> ziyaretçi sayfayı görüntülüyor</span>
+            </div>
+        </div>
+        
+        <section class="stats-grid">
+            <div class="stat-card"><div class="number">27</div><div class="label" id="statHistory">⏳ 27 Asırlık Tarihî Geçmiş</div></div>
+            <div class="stat-card"><div class="number">39</div><div class="label" id="statDistricts">📍 Bağlı İlçe Sayısı</div></div>
+            <div class="stat-card"><div class="number">5.343</div><div class="label" id="statArea">🌍 Toplam Yüzölçümü (km²)</div></div>
+        </section>
+
+        <section class="city-info-panel">
+            <div class="info-box"><div class="info-title" id="lblPop">👥 RESMÎ NÜFUS</div><div class="info-value highlight">15.656.000</div></div>
+            <div class="info-box">
+                <div class="info-title" id="lblDensityTitle">📈 İLÇE NÜFUS YOĞUNLUĞU</div>
+                <div class="info-value" style="font-size:0.95rem; line-height:1.4;" id="valDensity">
+                    En Yüksek: Esenyurt, Bağcılar, K.Çekmece<br>En Düşük: Şile (Geniş Ormanlık Alan)
+                </div>
+            </div>
+            <div class="info-box"><div class="info-title" id="lblAltitude">📐 COĞRAFİ RAKIM</div><div class="info-value" id="valAltitude">Ortalama: 120 m</div></div>
+            <div class="info-box"><div class="info-title" id="lblPost">📮 POSTA KODLARI</div><div class="info-value">34000 - 34990</div></div>
+            <div class="info-box"><div class="info-title" id="lblPhone">📞 ALAN KODLARI</div><div class="info-value">0212 / 0216</div></div>
+            <div class="info-box" style="border-left-color: #00e5ff;">
+                <div class="info-title" id="lblWeatherTitle">🌤️ ANLIK HAVA DURUMU (API)</div>
+                <div class="info-value" id="liveWeatherDisplay">Yükleniyor...</div>
+            </div>
+        </section>
+
+        <section class="traffic-alerts-section">
+            <h3 style="color: #ffaa00; font-size: 1.4rem; font-weight: 700;" id="trafficTitle">🚧 Canlı Trafik Akışı, Anlık Yoğunluk & Yol Tehlikeleri</h3>
+            <p style="font-size: 0.85rem; color: var(--text-sub); margin-bottom: 10px;" id="trafficSubtitle">İstanbul ana ulaşım arterlerindeki gerçek zamanlı trafik yoğunluğu oranları ile sürücülerin karşısına çıkabilecek kritik tehlikeler:</p>
+            
+            <div class="traffic-grid-layout">
+                <div>
+                    <div class="traffic-subheading" id="subheadDensity">📈 Ana Arterlerin Anlık Yoğunluk Durumu</div>
+                    <div id="densityBarsContainer"></div>
+                </div>
+                
+                <div>
+                    <div class="traffic-subheading" id="subheadHazards">⚠️ Kritik Sürpriz Tehlike & Engel Uyarıları</div>
+                    <div id="roadHazardsContainer"></div>
+                </div>
+            </div>
+        </section>
+
+        <h3 style="color: #ffcc00; margin-bottom: 15px; font-size: 1.4rem;" id="institutionsTitle">🏛️ Kurumsal Linkler ve Resmî Makamlar</h3>
+        <section class="official-institutions">
+            <div class="ibb-btn-container">
+                <a href="https://www.ibb.istanbul" target="_blank" class="ibb-link-btn">
+                    <div class="ibb-logo-container">
+                        <svg class="ibb-logo-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M50 5 L15 30 L15 70 L50 95 L85 70 L85 30 Z" fill="none" stroke="#ffcc00" stroke-width="6"/>
+                            <circle cx="50" cy="42" r="14" fill="#ffcc00"/>
+                            <path d="M35 70 Q50 60 65 70" fill="none" stroke="#ffcc00" stroke-width="6" stroke-linecap="round"/>
+                            <line x1="50" y1="56" x2="50" y2="78" stroke="#ffcc00" stroke-width="6"/>
+                        </svg>
+                    </div>
+                    <span id="ibbBtnText">İstanbul Büyükşehir Belediyesi Resmi Sitesi</span>
+                </a>
+            </div>
+            <div class="other-institutions-grid">
+                <a href="http://www.istanbul.gov.tr" target="_blank" class="inst-card">
+                    <span class="inst-title" id="instGovTitle">T.C. Mülki İdare</span>
+                    <span class="inst-name" id="instGovName">İstanbul Valiliği</span>
+                </a>
+                <a href="https://istanbul.iem.gov.tr" target="_blank" class="inst-card">
+                    <span class="inst-title" id="instPoliceTitle">Kamu Güvenliği</span>
+                    <span class="inst-name" id="instPoliceName">İstanbul İl Emniyet Müdürlüğü</span>
+                </a>
+                <a href="https://istanbul.ktb.gov.tr" target="_blank" class="inst-card">
+                    <span class="inst-title" id="instCultureTitle">Kültür & Turizm</span>
+                    <span class="inst-name" id="instCultureName">İl Kültür ve Turizm Müdürlüğü</span>
+                </a>
+            </div>
+        </section>
+
+        <section class="emergency-section">
+            <h3 style="color: #ff4444; font-size: 1.4rem; font-weight: 700;" id="emergencyTitle">🚨 Önemli Acil Durum ve Karayolu Destek Hatları</h3>
+            <p style="font-size: 0.85rem; color: var(--text-sub); margin-bottom: 5px;" id="emergencySubtitle">Türkiye'de tüm temel acil servisler tek bir numarada (112) birleşmiştir. İstanbul içi otoyollarda teknik yardım için özel numaraları arayabilirsiniz.</p>
+            <div class="emergency-grid" id="emergencyGrid"></div>
+        </section>
+
+        <section class="map-section">
+            <h2 style="font-size: 1.5rem; color: #ffcc00; margin-bottom: 15px;" id="mapTitle">🗺️ İstanbul Detaylı İlçe ve Mülki İdare Haritası</h2>
+            <p style="color: var(--text-sub); font-size: 0.9rem; margin-bottom: 20px;" id="mapSubtitle">İstanbul'un 39 ilçesinin konumlarını, sınırlarını ve mülki idare yapısını inceleyin.</p>
+            <div class="map-container">
+                <img src="istanbul12.jpg" alt="İstanbul Mülki İdare Haritası" class="map-image">
+            </div>
+        </section>
+
+        <section class="eds-section">
+            <h2 style="font-size: 1.6rem; color: #ffcc00; margin-bottom: 10px;" id="edsTitle">📸 Akıllı Trafik Denetimi & Güncel Hız Limitleri</h2>
+            <p style="color: var(--text-sub); font-size: 0.95rem;" id="edsSubtitle">İstanbul genelinde uygulanan UKOME kararlı hız sınırları ve Elektronik Denetleme Sistemleri (EDS).</p>
+            
+            <div class="speed-checker-box">
+                <div style="font-weight: 600; color: #ffcc00; font-size: 1.1rem;" id="speedCheckerTitle">⚡ Yol Tipine Göre Hız Limiti Sorgulama (Otomobil)</div>
+                <div class="checker-controls">
+                    <select class="checker-select" id="roadTypeSelect" onchange="checkSpeedLimit()"></select>
+                </div>
+                <div class="checker-display">
+                    <div>
+                        <div style="font-size: 0.8rem; color: var(--text-sub);" id="lblLegalSpeed">Yasal Hız Limiti</div>
+                        <div class="speed-badge" id="legalSpeed">130 km/s</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 0.8rem; color: var(--text-sub);" id="lblPenaltySpeed">Ceza Yazma Sınırı (%10 dahil)</div>
+                        <div class="speed-badge" style="color: #00e5ff;" id="penaltySpeed">143 km/s</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="planner-section">
+            <h2 style="font-size: 1.6rem; color: #ffcc00; margin-bottom: 10px;" id="plannerTitle">🗺️ Gelişmiş Transit Rota ve Tarihi Yerler Asistanı</h2>
+            <p style="color: var(--text-sub); font-size: 0.95rem; margin-bottom: 20px;" id="plannerSubtitle">İstanbul'un en önemli tarihi yapılarını ve turistik bölgelerini seçerek optimal toplu taşıma rotasını anında öğrenin.</p>
+            <div class="planner-grid">
+                <select class="planner-select" id="plannerDest" onchange="if(document.getElementById('plannerResult').style.display === 'block') calculateRoute();"></select>
+                <button class="planner-btn" id="plannerBtn" onclick="calculateRoute()">Optimal Rota ve Süreyi Hesapla ⚡</button>
+            </div>
+            <div class="planner-result" id="plannerResult"></div>
+        </section>
+
+        <section class="quiz-section">
+            <h2 class="section-title" id="pollMainTitle">Ziyaretçi Katılımı & Kamuoyu Anketleri</h2>
+            <div class="polls-grid" id="pollsGridContainer"></div>
+        </section>
+
+        <section class="feedback-section">
+            <h2 style="font-size: 1.6rem; color: #ffcc00; margin-bottom: 10px;" id="feedbackMainTitle">💬 Eleştiri, Öneri ve Ziyaretçi Yorumları</h2>
+            <p style="color: var(--text-sub); font-size: 0.95rem; margin-bottom: 20px;" id="feedbackSubtitle">Portal hakkındaki fikirlerinizi, eleştirilerinizi ve iyileştirme önerilerinizi yıldız puanı vererek bizimle paylaşın.</p>
+            
+            <div class="feedback-container">
+                <form class="feedback-form" id="feedbackForm" onsubmit="handleFeedbackSubmit(event)">
+                    <input type="text" class="feedback-input" id="fbName" placeholder="Adınız Soyadınız" required>
+                    <textarea class="feedback-textarea" id="fbComment" placeholder="Eleştiri veya geliştirme önerinizi buraya yazınız..." required></textarea>
+                    
+                    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+                        <span style="font-size: 0.9rem; font-weight: 500;" id="lblGiveStars">Değerlendirmeniz:</span>
+                        <div class="star-rating-control" id="starContainer">
+                            <span onclick="setFeedbackRating(1)">★</span>
+                            <span onclick="setFeedbackRating(2)">★</span>
+                            <span onclick="setFeedbackRating(3)">★</span>
+                            <span onclick="setFeedbackRating(4)">★</span>
+                            <span onclick="setFeedbackRating(5)">★</span>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="feedback-submit-btn" id="fbSubmitBtn">Yorumu ve Puanı Gönder 🚀</button>
+                </form>
+
+                <div class="comments-feed" id="commentsFeedContainer"></div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p id="lblFooterRights">&copy; 2026 İstanbul Tanıtım Portalı. Tüm Hakları Saklıdır.</p>
+        <p class="footer-note" id="lblFooterCredit">Premium Tasarım: Buğra Ergünay</p>
+    </footer>
+
+    <script>
+        // Global Uygulama Değişkenleri
+        let currentLang = 'tr';
+        let weatherTempGlobal = 22;
+        let weatherDescCodeGlobal = 0;
+        let currentSelectedRating = 0;
+
+        const pollVotesMemory = {
+            1: { yes: 74, no: 26 }, 2: { yes: 88, no: 12 }, 3: { yes: 65, no: 35 }, 4: { yes: 91, no: 9 }
+        };
+
+        // Yorumlar Kendi Orijinal Dilinde Kalıyor, Dinamik Metin Çevirileri Nesnede Tutuluyor
+        const multiLangComments = [
+            { id: 1, name: "Ahmet Yılmaz", flag: "🇹🇷", stars: 4, text: { tr: "Karanlık tema tasarımı harika olmuş ancak yazı boyutları mobil cihazlarda biraz küçük kalıyor, okunabilirlik geliştirilebilir.", en: "The dark theme design is great, but the font sizes are a bit small on mobile devices; readability could be improved.", de: "Das dunkle Design ist großartig, aber die Schriftgrößen auf Mobilgeräten sind etwas klein. Die Lesbarkeit könnte verbessert werden.", es: "El diseño del tema oscuro es excelente, pero los tamaños de fuente son algo pequeños en dispositivos móviles; se podría mejorar la legibilidad." }, origLang: 'tr' },
+            { id: 2, name: "John Doe", flag: "🇺🇸", stars: 5, text: { tr: "Harika bir portal! Canlı döviz çevirici ve anlık trafik durumları turistler için tam bir hayat kurtarıcı.", en: "Wonderful portal! The live currency converter and instant traffic alerts are an absolute lifesaver for tourists.", de: "Wunderbares Portal! Der Live-Währungsrechner und die sofortigen Verkehrswarnungen sind ein absoluter Lebensretter für Touristen.", es: "¡Maravilloso portal! El conversor de divisas en vivo y las alertas de tráfico instantáneas son un salvavidas absoluto para los turistas." }, origLang: 'en' },
+            { id: 3, name: "Hans Müller", flag: "🇩🇪", stars: 3, text: { tr: "Sitedeki hız sınırları tablosu kullanışlı, fakat tarihi yerler asistanına toplu taşıma fiyatları da şikayet olarak eklenmeliydi.", en: "The speed limits table on the site is useful, but public transport prices should have been added to the historical attractions assistant as a critique.", de: "Die Tempolimit-Tabelle auf der Website ist nützlich, aber die Preise für öffentliche Verkehrsmittel hätten im Assistenten für historische Sehenswürdigkeiten hinzugefügt werden müssen.", es: "La tabla de límites de velocidad es útil, pero los precios del transporte público deberían haberse añadido al asistente de atracciones históricas como una crítica." }, origLang: 'de' },
+            { id: 4, name: "Carlos Santana", flag: "🇪🇸", stars: 4, text: { tr: "İstanbul haritası çok yükseklik ve detay sunuyor. Keşke ilçelerin tarihi hakkında küçük rehberler de olsaydı.", en: "The Istanbul map offers great resolution and detail. I wish there were short historical guides for the districts as well.", de: "Die Istanbul-Karte bietet eine tolle Auflösung und Detailgenauigkeit. Ich wünschte, es gäbe auch kurze historische Leitfäden für die Bezirke.", es: "El mapa de Estambul ofrece una gran resolución y detalle. Ojalá hubiera guías históricas cortas para los distritos también." }, origLang: 'es' },
+            { id: 5, name: "Elif Demir", flag: "🇹🇷", stars: 2, text: { tr: "Şikayetçiyim; akıllı rota planlayıcı bazen en yoğun vapur hatlarını hesaba katmıyor, deniz ulaşımı rotaları güncellenmeli.", en: "I have a complaint; the smart route planner sometimes ignores the busiest ferry lines, maritime transport routes must be updated.", de: "Ich habe eine Beschwerde; der intelligente Routenplaner ignoriert manchmal die geschäftigsten Fährlinien, Seeverkehrsrouten müssen aktualisiert werden.", es: "Tengo una queja; el planificador inteligente a veces ignora las líneas de ferry más concurridas, las rutas de transporte marítimo deben actualizarse." }, origLang: 'tr' }
+        ];
+
+        let baseTotalUsers = 14258; 
+        let currentLiveUsers = Math.floor(Math.random() * (65 - 35 + 1)) + 35; 
+        let dynamicTotalUsers = baseTotalUsers + currentLiveUsers; 
+
+        function formatNumber(num) { return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."); }
+
+        // Eksiksiz ve Tam Çevrilmiş Geniş Sözlük Paketi
+        const langData = {
+            tr: {
+                welcome: "Portfolyo Projesi | Buğra Ergünay", cityName: "İSTANBUL", mainDesc: "Yüzyılların Eskitemediği Kadim Şehir", loveTitle: "Âşık olunası şehir...", subDesc: "Yedi tepenin üstünde yükselen, şairlerin ilham kaynağı, her sokağı ayrı bir destan barındıran dünya mirası.",
+                lblLangSelect: "Dil / Language:", themeGunduz: "☀️ Gündüz", themeGece: "🌙 Gece", totalCounter: "📊 Toplam Ziyaret:", liveCounterPre: "Şu anda ", liveCounterPost: " ziyaretçi sayfayı görüntülüyor",
+                statHistory: "⏳ 27 Asırlık Tarihî Geçmiş", statDistricts: "📍 Bağlı İlçe Sayısı", statArea: "🌍 Toplam Yüzölçümü (km²)",
+                lblPop: "👥 RESMÎ NÜFUS", lblAltitude: "📐 COĞRAFİ RAKIM", valAltitude: "Ortalama: 120 m", lblPost: "📮 POSTA KODLARI", lblPhone: "📞 ALAN KODLARI", lblWeatherTitle: "🌤️ ANLIK HAVA DURUMU (API)", weatherLoading: "Yükleniyor...",
+                lblDensityTitle: "📈 İLÇE NÜFUS YOĞUNLUĞU", valDensity: "En Yüksek: Esenyurt, Bağcılar, K.Çekmece<br>En Düşük: Şile (Geniş Ormanlık Alan)",
+                trafficTitle: "🚧 Canlı Trafik Akışı, Anlık Yoğunluk & Yol Tehlikeleri", trafficSubtitle: "İstanbul ana ulaşım arterlerindeki gerçek zamanlı trafik yoğunluğu oranları ile sürücülerin karşısına çıkabilecek kritik tehlikeler:",
+                subheadDensity: "📈 Ana Arterlerin Anlık Yoğunluk Durumu", subheadHazards: "⚠️ Kritik Sürpriz Tehlike & Engel Uyarıları",
+                institutionsTitle: "🏛️ Kurumsal Linkler ve Resmî Makamlar", ibbBtnText: "İstanbul Büyükşehir Belediyesi Resmi Sitesi", instGovTitle: "T.C. Mülki İdare", instGovName: "İstanbul Valiliği", instPoliceTitle: "Kamu Güvenliği", instPoliceName: "İstanbul İl Emniyet Müdürlüğü", instCultureTitle: "Kültür & Turizm", instCultureName: "İl Kültür ve Turizm Müdürlüğü",
+                emergencyTitle: "🚨 Önemli Acil Durum ve Karayolu Destek Hatları", emergencySubtitle: "Türkiye'de tüm temel acil servisler tek bir numarada (112) birleşmiştir. İstanbul içi otoyollarda teknik yardım için özel numaraları arayabilirsiniz.",
+                mapTitle: "🗺️ İstanbul Detaylı İlçe ve Mülki İdare Haritası", mapSubtitle: "İstanbul'un 39 ilçesinin konumlarını, sınırlarını ve mülki idare yapısını inceleyin.",
+                edsTitle: "📸 Akıllı Trafik Denetimi & Güncel Hız Limitleri", edsSubtitle: "İstanbul genelinde uygulanan UKOME kararlı hız sınırları ve Elektronik Denetleme Sistemleri (EDS).", speedCheckerTitle: "⚡ Yol Tipine Göre Hız Limiti Sorgulama", lblLegalSpeed: "Yasal Hız Limiti", lblPenaltySpeed: "Ceza Yazma Sınırı (%10 dahil)",
+                plannerTitle: "🗺️ Gelişmiş Transit Rota ve Tarihi Yerler Asistanı", plannerSubtitle: "İstanbul'un en önemli tarihi yapılarını ve turistik bölgelerini seçerek optimal toplu taşıma rotasını anında öğrenin.", plannerBtn: "Optimal Rota ve Süreyi Hesapla ⚡", routePre: "📍 Ürün / Konum:", routeOptTime: "⚡ Optimal Süre:", routeLabel: "Ulaşım Rotaları:",
+                pollMainTitle: "Ziyaretçi Katılımı & Kamuoyu Anketleri", lblFooterRights: "© 2026 İstanbul Tanıtım Portalı. Tüm Hakları Saklıdır.", lblFooterCredit: "Premium Tasarım: Buğra Ergünay",
+                btnYes: "Evet 👍", btnNo: "Hayır 👎", labelYes: "Evet", labelNo: "Hayır", translateText: "Çevir 🌐", originalText: "Orijinal 📄",
+                feedbackMainTitle: "💬 Eleştiri, Öneri ve Ziyaretçi Yorumları", feedbackSubtitle: "Portal hakkındaki fikirlerinizi, eleştirilerinizi ve iyileştirme önerilerinizi yıldız puanı vererek bizimle paylaşın.",
+                lblGiveStars: "Değerlendirmeniz:", fbNamePlaceholder: "Adınız Soyadınız", fbCommentPlaceholder: "Eleştiri veya geliştirme önerinizi buraya yazınız...", fbSubmitBtn: "Yorumu ve Puanı Gönder 🚀",
+                weatherTxt: {0:"Açık", 1:"Parçalı Bulutlu", 2:"Sisli", 3:"Yağmurlu", 4:"Karlı", 5:"Sağanak Yağış", 6:"Gökgürültülü Fırtına"},
+                roadTxt: {
+                    otoyol: "TEM ve Kuzey Marmara Otoyolu (Otomobil)", 
+                    bolunmus: "Şehirlerarası Bölünmüş Yollar (Otomobil)", 
+                    yerlesim: "Şehir İçi Yerleşim Yeri Ana Arterler",
+                    tanker: "Sıvı/Gaz Taşıyan Tankerler (Tüm Yollar)",
+                    otobus: "Otobüs & Ağır Vasıta Sınırları (TEM)",
+                    tuneller: "Avrasya ve Dolmabahçe Tünel İçi EDS Sınırı"
+                },
+                destTxt: {
+                    sultanahmet: {name: "Sultanahmet Camii & Ayasofya", route: "T1 Tramvay hattı Sultanahmet durağı.", time: "Eminönü'nden 10 dk"},
+                    galata: {name: "Galata Kulesi", route: "M2 Metrosu Şişhane durağı veya T1 Karaköy yürüyüşü.", time: "Taksim'den 15 dk"},
+                    topkapi: {name: "Topkapı Sarayı Müzesi", route: "T1 Tramvayı Gülhane veya Sultanahmet durağı.", time: "Karaköy'den 12 dk"},
+                    yerebatan: {name: "Yerebatan Sarnıcı", route: "T1 Tramvayı Sultanahmet durağına 2 dk yürüme mesafesi.", time: "Eminönü'nden 12 dk"},
+                    dolmabahce: {name: "Dolmabahçe Sarayı", route: "Kabataş Tramvay son durak veya Beşiktaş'tan yürüyüş.", time: "Taksim'den 8 dk"},
+                    kapalicarsi: {name: "Tarihi Kapalıçarşı", route: "T1 Tramvay hattı Beyazıt-Kapalıçarşı durağı.", time: "Eminönü'nden 5 dk"},
+                    pierreloti: {name: "Pierre Loti Tepesi", route: "Eyüpsultan merkezden TF2 Teleferik hattı ile çıkış.", time: "Eminönü'nden 25 dk"},
+                    camlica: {name: "Büyük Çamlıca Tepesi & Camii", route: "Üsküdar'dan 15C otobüs hattı veya metro aktarması.", time: "Kadıköy'den 30 dk"},
+                    rumelihisari: {name: "Rumeli Hisarı", route: "Sarıyer yönüne giden 25E, 40T sahil otobüs hatları.", time: "Beşiktaş'tan 20 dk"}
+                },
+                densityData: [
+                    { road: "15 Temmuz Şehitler Köprüsü (1. Çevreyolu)", percentage: 84, color: "#ff4444" },
+                    { road: "Fatih Sultan Mehmet Köprüsü (2. Çevreyolu)", percentage: 72, color: "#ffaa00" },
+                    { road: "Yavuz Sultan Selim Köprüsü (3. Çevreyolu)", percentage: 22, color: "#00c851" },
+                    { road: "Haliç Köprüsü Geçişi Aksı", percentage: 91, color: "#ff4444" },
+                    { road: "D-100 (E-5) Ana Metrobüs Güzergahı", percentage: 76, color: "#ffaa00" },
+                    { road: "Avrasya Tüneli Geçişi (Asya - Avrupa)", percentage: 35, color: "#00e5ff" }
+                ],
+                hazardsData: [
+                    { title: "⚠️ Gizli Buzlanma Uyarısı", text: "3. Çevreyolu viyadüklerinde gece ani ısı düşüşüne bağlı gizli buzlanma riski.", loc: "Hadımköy - Ispartakule" },
+                    { title: "💨 Şiddetli Yan Rüzgarlar", text: "15 Temmuz Şehitler Köprüsü geçişinde ani rüzgar hamleleri var; yüksek kasa ve motosikletli sürücüler dikkatli olmalı.", loc: "1. Çevreyolu Köprü Girişi" },
+                    { title: "🧱 Yola Düşen Cisim / Engel", text: "Haliç Köprüsü orta şeride düşen araç parçaları trafiği yavaşlatıyor, ekipler sevk edildi.", loc: "Haliç Metrobüs Yanı" }
+                ],
+                emergencyData: [
+                    { label: 'Acil Çağrı Merkezi', sub: 'Polis, Ambulans, İtfaiye, Jandarma (112)' },
+                    { label: 'Karayolları Danışma', sub: 'Otoyol Destek ve Yol Durumu Bilgisi (159)' }
+                ],
+                polls: [
+                    { id: 1, title: "İstanbul genelindeki toplu taşıma hatlarının entegrasyonunu ve sefer sıklıklarını yeterli buluyor musunuz?" },
+                    { id: 2, title: "Tarihi Yarımada (Eminönü-Sultanahmet) bölgesinin tamamen araç trafiğine kapatılıp yayalaştırılmasını destekler misiniz?" },
+                    { id: 3, title: "Şehirdeki mega altyapı projelerinin (köprüler, tüneller) İstanbul'un trafik yoğunluğunu kalıcı olarak çözdüğüne inanıyor musunuz?" },
+                    { id: 4, title: "İstanbul'un mevcut yeşil alan ve park miktarının deprem toplanma alanları açısından yeterli olduğunu düşünüyor musunuz?" }
+                ]
+            },
+            en: {
+                welcome: "Portfolio Project | Bugra Ergunay", cityName: "ISTANBUL", mainDesc: "The Ancient City Unfaded by Centuries", loveTitle: "A city to fall in love with...", subDesc: "Rising upon seven hills, the source of inspiration for poets, a world heritage where every street holds a distinct legend.",
+                lblLangSelect: "Language / Dil:", themeGunduz: "☀️ Day", themeGece: "🌙 Night", totalCounter: "📊 Total Visits:", liveCounterPre: "Currently, ", liveCounterPost: " visitors are viewing the page",
+                statHistory: "⏳ 27 Centuries of Rich History", statDistricts: "📍 Number of Districts", statArea: "🌍 Total Surface Area (km²)",
+                lblPop: "👥 OFFICIAL POPULATION", lblAltitude: "📐 GEOGRAPHIC ALTITUDE", valAltitude: "Average: 120 m", lblPost: "📮 POSTAL CODES", lblPhone: "📞 AREA CODES", lblWeatherTitle: "🌤️ LIVE WEATHER (API)", weatherLoading: "Loading...",
+                lblDensityTitle: "📈 DISTRICT POPULATION DENSITY", valDensity: "Highest: Esenyurt, Bagcilar, K.Cekmece<br>Lowest: Sile (Vast Forest Lands)",
+                trafficTitle: "🚧 Live Traffic Flow, Instant Density & Road Hazards", trafficSubtitle: "Real-time traffic density percentages on Istanbul main transportation arteries and critical road hazards awaiting drivers:",
+                subheadDensity: "📈 Instant Congestion Rates of Main Arteries", subheadHazards: "⚠️ Critical Surprise Road Hazards & Obstacles",
+                institutionsTitle: "🏛️ Institutional Links & Official Authorities", ibbBtnText: "Istanbul Metropolitan Municipality Official Site", instGovTitle: "Civil Administration", instGovName: "Governorate of Istanbul", instPoliceTitle: "Public Security", instPoliceName: "Istanbul Provincial Police Department", instCultureTitle: "Culture & Tourism", instCultureName: "Provincial Directorate of Culture and Tourism",
+                emergencyTitle: "🚨 Critical Emergency & Highway Support Hotlines", emergencySubtitle: "In Turkey, all core emergency services are consolidated into a single number (112). You can call special numbers for technical assistance on highways inside Istanbul.",
+                mapTitle: "🗺️ Istanbul Detailed District & Civil Administration Map", mapSubtitle: "Examine the locations, borders, and administrative structure of Istanbul's 39 districts.",
+                edsTitle: "📸 Smart Traffic Enforcement & Current Speed Limits", edsSubtitle: "Speed limits enforced by UKOME decisions and Electronic Enforcement Systems (EDS) across Istanbul.", speedCheckerTitle: "⚡ Speed Limit Inquiry by Road Type", lblLegalSpeed: "Legal Speed Limit", lblPenaltySpeed: "Fine Enforcement Limit (incl. 10%)",
+                plannerTitle: "🗺️ Advanced Transit Route & Historical Places Assistant", plannerSubtitle: "Select the most important historical structures and tourist areas of Istanbul to learn the optimal public transport route instantly.", plannerBtn: "Calculate Optimal Route & Time ⚡", routePre: "📍 Attraction / Location:", routeOptTime: "⚡ Optimal Time:", routeLabel: "Transit Routes:",
+                pollMainTitle: "Visitor Engagement & Public Polls", lblFooterRights: "© 2026 Istanbul Presentation Portal. All Rights Reserved.", lblFooterCredit: "Premium Design: Bugra Ergunay",
+                btnYes: "Yes 👍", btnNo: "No 👎", labelYes: "Yes", labelNo: "No", translateText: "Translate 🌐", originalText: "Original 📄",
+                feedbackMainTitle: "💬 Critique, Suggestions & Visitor Comments", feedbackSubtitle: "Share your thoughts, critiques and development suggestions by giving a star rating to our portal.",
+                lblGiveStars: "Your Rating:", fbNamePlaceholder: "Your Full Name", fbCommentPlaceholder: "Write your critique or suggestion here...", fbSubmitBtn: "Submit Comment & Score 🚀",
+                weatherTxt: {0:"Clear Sky", 1:"Partly Cloudy", 2:"Foggy", 3:"Rainy", 4:"Snowy", 5:"Heavy Rain", 6:"Thunderstorm"},
+                roadTxt: {
+                    otoyol: "TEM and Northern Marmara Highway (Car)", 
+                    bolunmus: "Intercity Divided Roads (Car)", 
+                    yerlesim: "Urban Settlement Main Arteries",
+                    tanker: "Liquid/Gas Tankers (All Roads)",
+                    otobus: "Bus & Heavy Vehicles Limits (TEM)",
+                    tuneller: "Eurasia & Dolmabahce Tunnel EDS Limits"
+                },
+                destTxt: {
+                    sultanahmet: {name: "Sultanahmet Mosque & Hagia Sophia", route: "T1 Tram line Sultanahmet station.", time: "10 mins from Eminonu"},
+                    galata: {name: "Galata Tower", route: "M2 Metro Sishane station or T1 Karakoy walking path.", time: "15 mins from Taksim"},
+                    topkapi: {name: "Topkapi Palace Museum", route: "T1 Tram Gulhane or Sultanahmet station.", time: "12 mins from Karakoy"},
+                    yerebatan: {name: "Basilica Cistern", route: "2 mins walking distance from T1 Tram Sultanahmet station.", time: "12 mins from Eminonu"},
+                    dolmabahce: {name: "Dolmabahce Palace", route: "Kabataş Tramway last station or walk from Besiktas.", time: "8 mins from Taksim"},
+                    kapalicarsi: {name: "Historical Grand Bazaar", route: "T1 Tram line Beyazit-Grand Bazaar station.", time: "5 mins from Eminonu"},
+                    id: {name: "Pierre Loti Hill", route: "Ascend from Eyupsultan center via TF2 Cable Car line.", time: "25 mins from Eminonu"},
+                    camlica: {name: "Camlica Hill & Mosque", route: "Bus line 15C from Uskudar or metro transfer.", time: "30 mins from Kadikoy"},
+                    rumelihisari: {name: "Rumeli Fortress", route: "Coastal bus lines 25E, 40T going towards Sariyer.", time: "20 mins from Besiktas"}
+                },
+                densityData: [
+                    { road: "15 July Martyrs Bridge (1st Ring Road)", percentage: 84, color: "#ff4444" },
+                    { road: "Fatih Sultan Mehmet Bridge (2nd Ring Road)", percentage: 72, color: "#ffaa00" },
+                    { road: "Yavuz Sultan Selim Bridge (3rd Ring Road)", percentage: 22, color: "#00c851" },
+                    { road: "Halic Bridge Crossing Axis", percentage: 91, color: "#ff4444" },
+                    { road: "D-100 (E-5) Main Metrobus Route", percentage: 76, color: "#ffaa00" },
+                    { road: "Eurasia Tunnel Pass (Asia - Europe)", percentage: 35, color: "#00e5ff" }
+                ],
+                hazardsData: [
+                    { title: "⚠️ Black Ice Warning", text: "Risk of black ice on 3rd Ring Road viaducts due to sudden drop in night temperatures.", loc: "Hadimkoy - Ispartakule" },
+                    { title: "💨 Heavy Crosswinds", text: "Sudden strong wind gusts on the 15 July Martyrs Bridge; trucks and motorcyclists should exercise caution.", loc: "1st Ring Road Entrance" },
+                    { title: "🧱 Object on Road", text: "Vehicle parts fallen onto the middle lane of Halic Bridge slowing traffic down.", loc: "Halic Metrobus Lane" }
+                ],
+                emergencyData: [
+                    { label: 'Emergency Center', sub: 'Police, Ambulance, Fire (112)' },
+                    { label: 'Highways Advisory', sub: 'Highway Technical Support (159)' }
+                ],
+                polls: [
+                    { id: 1, title: "Do you find the integration and frequency of public transportation lines across Istanbul sufficient?" },
+                    { id: 2, title: "Would you support a complete ban on vehicle traffic in the historical peninsula to make it pedestrian-only?" },
+                    { id: 3, title: "Do you believe mega infrastructure projects (bridges, tunnels) permanently solve traffic congestion?" },
+                    { id: 4, title: "Do you think Istanbul's current green spaces are sufficient regarding earthquake assembly zones?" }
+                ]
+            },
+            de: {
+                welcome: "Portfolio-Projekt | Bugra Ergunay", cityName: "ISTANBUL", mainDesc: "Die von Jahrhunderten unzerstörte alte Stadt", loveTitle: "Eine Stadt zum Verlieben...", subDesc: "Erhebt sich auf sieben Hügeln, die Inspirationsquelle für Dichter.",
+                lblLangSelect: "Sprache / Dil:", themeGunduz: "☀️ Tag", themeGece: "🌙 Nacht", totalCounter: "📊 Besuche:", liveCounterPre: "Aktuell: ", liveCounterPost: " Besucher online",
+                statHistory: "⏳ 27 Jahrhunderte Geschichte", statDistricts: "📍 39 Distrikte", statArea: "🌍 5.343 km² Fläche",
+                lblPop: "👥 BEVÖLKERUNG", lblAltitude: "📐 COHRAFI HÖHE", valAltitude: "Mittelwert: 120 m", lblPost: "📮 POSTLEITZAHL", lblPhone: "📞 TELEFONVORWAHL", lblWeatherTitle: "🌤️ WETTER (API)", weatherLoading: "Laden...",
+                lblDensityTitle: "📈 BEVÖLKERUNGSDICHTE DER BEZIRKE", valDensity: "Höchste: Esenyurt, Bagcilar, K.Cekmece<br>Niedrigste: Sile (Große Waldgebiete)",
+                trafficTitle: "🚧 Verkehrsfluss & Straßengefahren", trafficSubtitle: "Echtzeit-Verkehrsdichte auf Hauptverkehrsadern und kritische Gefahren:",
+                subheadDensity: "📈 Verkehrsüberlastung der Hauptverkehrsadern", subheadHazards: "⚠️ Kritische Straßengefahren & Hindernisse",
+                institutionsTitle: "🏛️ Behörden & Offizielle Links", ibbBtnText: "Stadtverwaltung Istanbul Offizielle Seite", instGovTitle: "Gouvernement", instGovName: "Gouverneur von Istanbul", instPoliceTitle: "Sicherheit", instPoliceName: "Polizeidirektion Istanbul", instCultureTitle: "Kultur & Tourismus", instCultureName: "Kulturdirektion",
+                emergencyTitle: "🚨 Notrufe & Autobahnhilfe", emergencySubtitle: "Alle Notrufe in der Türkei sind unter 112 konsolidiert.",
+                mapTitle: "🗺️ Detaillierte Bezirkskarte von Istanbul", mapSubtitle: "Sehen Sie sich die 39 Bezirke von Istanbul an.",
+                edsTitle: "📸 Radarkontrollen & Tempolimits", edsSubtitle: "UKOME-Geschwindigkeitsbegrenzungen und EDS-Radarsysteme.", speedCheckerTitle: "⚡ Tempolimit-Abfrage nach Straßentyp", lblLegalSpeed: "Erlaubtes Limit", lblPenaltySpeed: "Bußgeld ab (+10%)",
+                plannerTitle: "🗺️ Historischer Routenplaner-Assistent", plannerSubtitle: "Wählen Sie historische Stätten aus, um Transportrouten anzuzeigen.", plannerBtn: "Route Berechnen ⚡", routePre: "📍 Ort:", routeOptTime: "⚡ Zeit:", routeLabel: "Routen:",
+                pollMainTitle: "Ziyaretçi Anketleri / Umfragen", lblFooterRights: "© 2026 Presentation Portal. Alle Rechte vorbehalten.", lblFooterCredit: "Design: Bugra Ergunay",
+                btnYes: "Ja 👍", btnNo: "Nein 👎", labelYes: "Ja", labelNo: "Nein", translateText: "Übersetzen 🌐", originalText: "Original 📄",
+                feedbackMainTitle: "💬 Feedback & Kritik", feedbackSubtitle: "Geben Sie Ihre Sternebewertung ab.",
+                lblGiveStars: "Bewertung:", fbNamePlaceholder: "Name Nachname", fbCommentPlaceholder: "Schreiben Sie Ihre Kritik...", fbSubmitBtn: "Senden 🚀",
+                weatherTxt: {0:"Klar", 1:"Bewölkt", 2:"Nebel", 3:"Regen", 4:"Schnee", 5:"Schauer", 6:"Gewitter"},
+                roadTxt: {
+                    otoyol: "TEM und Nördliche Marmara Autobahn (PKW)", 
+                    bolunmus: "Schnellstraßen Innerorts (PKW)", 
+                    yerlesim: "Innerorts Hauptstraßen",
+                    tanker: "Flüssiggastanker (Alle Straßen)",
+                    otobus: "Busse & LKWs Limits (TEM)",
+                    tuneller: "Eurasien & Dolmabahce Tunnel EDS"
+                },
+                destTxt: {
+                    sultanahmet: {name: "Sultanahmet-Moschee", route: "T1 Straßenbahn Sultanahmet.", time: "10 Min von Eminonu"},
+                    galata: {name: "Galataturm", route: "M2 U-Bahn Sishane oder T1 Karakoy.", time: "15 Min von Taksim"},
+                    topkapi: {name: "Topkapi-Palast", route: "T1 Straßenbahn Gulhane.", time: "12 Min von Karakoy"},
+                    yerebatan: {name: "Zisterne", route: "T1 Straßenbahn Sultanahmet.", time: "12 Min"},
+                    dolmabahce: {name: "Dolmabahce-Palast", route: "Tram Kabatas oder zu Fuß von Besiktas.", time: "8 Min"},
+                    kapalicarsi: {name: "Großer Basar", route: "T1 Tram Beyazit Basar.", time: "5 Min"},
+                    pierreloti: {name: "Pierre Loti Hügel", route: "Seilbahn TF2 von Eyupsultan.", time: "25 Min"},
+                    camlica: {name: "Camlica Hügel", route: "Bus 15C von Uskudar.", time: "30 Min"},
+                    rumelihisari: {name: "Rumelische Festung", route: "Bus 25E oder 40T Richtung Sariyer.", time: "20 Min"}
+                },
+                densityData: [
+                    { road: "15. Juli Brücke der Märtyrer (1. Ringstraße)", percentage: 84, color: "#ff4444" },
+                    { road: "Fatih-Sultan-Mehmet-Brücke (2. Ringstraße)", percentage: 72, color: "#ffaa00" },
+                    { road: "Yavuz-Sultan-Selim-Brücke (3. Ringstraße)", percentage: 22, color: "#00c851" },
+                    { road: "Halic-Brücke Überquerungsachse", percentage: 91, color: "#ff4444" },
+                    { road: "D-100 (E-5) Metrobus-Hauptstrecke", percentage: 76, color: "#ffaa00" },
+                    { road: "Eurasien-Tunnel Pass (Asien - Europa)", percentage: 35, color: "#00e5ff" }
+                ],
+                hazardsData: [
+                    { title: "⚠️ Glatteiswarnung", text: "Gefahr von Glatteis auf den Viadukten der 3. Ringstraße wegen Kälte.", loc: "Hadimkoy" },
+                    { title: "💨 Starke Seitenwinde", text: "Starke Windböen auf der 15. Juli Brücke; Motorräder aufpassen.", loc: "1. Ringstraße" },
+                    { title: "🧱 Hindernis auf der Straße", text: "Fahrzeugteile auf der Halic-Brücke blockieren die mittlere Spur.", loc: "Halic" }
+                ],
+                emergencyData: [{label:'Notrufzentrale', sub:'112'}, {label:'Autobahnhilfe', sub:'159'}],
+                polls: [{id:1, title:"Nahverkehr ausreichend?"},{id:2, title:"Altstadt autofrei?"},{id:3, title:"Mega-Projekte gelöst?"},{id:4, title:"Grünflächen genug?"}]
+            },
+            es: {
+                welcome: "Proyecto de Portafolio | Bugra Ergunay", cityName: "ESTAMBUL", mainDesc: "La Ciudad Antigua Indeleble por los Siglos", loveTitle: "Una ciudad para enamorarse...", subDesc: "Elevándose sobre siete colinas, fuente de inspiración de poetas.",
+                lblLangSelect: "Idioma / Dil:", themeGunduz: "☀️ Día", themeGece: "🌙 Noche", totalCounter: "📊 Visitas Totales:", liveCounterPre: "Actualmente, ", liveCounterPost: " usuarios ven la página",
+                statHistory: "⏳ 27 Siglos de Historia", statDistricts: "📍 39 Distritos Conectados", statArea: "🌍 5.343 km² Área Total",
+                lblPop: "👥 POBLACIÓN OFICIAL", lblAltitude: "📐 ALTITUD GEOGRÁFICA", valAltitude: "Promedio: 120 m", lblPost: "📮 CÓDIGO POSTAL", lblPhone: "📞 CÓDIGO DE ÁREA", lblWeatherTitle: "🌤️ CLIMA EN VIVO (API)", weatherLoading: "Cargando...",
+                lblDensityTitle: "📈 DENSIDAD DE POBLACIÓN", valDensity: "Más Alta: Esenyurt, Bagcilar, K.Cekmece<br>Más Baja: Sile (Zonas Forestales)",
+                trafficTitle: "🚧 Tráfico en Vivo y Peligros en la Vía", trafficSubtitle: "Porcentajes de congestión en tiempo real en arterias principales y peligros:",
+                subheadDensity: "📈 Congestión en Tiempo Real de Arterias Principales", subheadHazards: "⚠️ Alertas de Peligros Críticos y Obstáculos",
+                institutionsTitle: "🏛️ Enlaces Institucionales y Oficiales", ibbBtnText: "Sitio Oficial de la Municipalidad de Estambul", instGovTitle: "Gobernación", instGovName: "Gobernación de Estambul", instPoliceTitle: "Seguridad", instPoliceName: "Policía de Estambul", instCultureTitle: "Cultura y Turismo", instCultureName: "Dirección de Cultura",
+                emergencyTitle: "🚨 Líneas de Emergencia y Soporte Vial", emergencySubtitle: "Todos los servicios de emergencia están unificados en el 112.",
+                mapTitle: "🗺️ Mapa Detallado de Distritos de Estambul", mapSubtitle: "Examine la estructura administrativa de los 39 distritos.",
+                edsTitle: "📸 Radares de Tráfico y Límites de Velocidad", edsSubtitle: "Límites de velocidad regulados por UKOME y radares EDS.", speedCheckerTitle: "⚡ Consulta de Límites por Tipo de Vía", lblLegalSpeed: "Límite Legal", lblPenaltySpeed: "Multa desde (+10%)",
+                plannerTitle: "🗺️ Asistente de Rutas de Transporte Histórico", plannerSubtitle: "Seleccione atracciones turísticas para calcular la ruta óptima.", plannerBtn: "Calcular Ruta Óptima ⚡", routePre: "📍 Lugar:", routeOptTime: "⚡ Tiempo Óptimo:", routeLabel: "Rutas:",
+                pollMainTitle: "Encuestas Públicas", lblFooterRights: "© 2026 Portal Estambul. Todos los derechos reservados.", lblFooterCredit: "Diseño: Bugra Ergunay",
+                btnYes: "Sí 👍", btnNo: "No 👎", labelYes: "Sí", labelNo: "No", translateText: "Traducir 🌐", originalText: "Original 📄",
+                feedbackMainTitle: "💬 Críticas, Sugerencias y Comentarios", feedbackSubtitle: "Deje su puntuación con estrellas.",
+                lblGiveStars: "Su Calificación:", fbNamePlaceholder: "Nombre y Apellido", fbCommentPlaceholder: "Escriba su crítica aquí...", fbSubmitBtn: "Enviar Comentario 🚀",
+                weatherTxt: {0:"Despejado", 1:"Nublado", 2:"Niebla", 3:"Lluvia", 4:"Nieve", 5:"Chubasco", 6:"Tormenta"},
+                roadTxt: {
+                    otoyol: "Autopista TEM y Mármara Norte (Automóvil)", 
+                    bolunmus: "Vías Divididas Interurbanas (Automóvil)", 
+                    yerlesim: "Arterias Principales Urbanas",
+                    tanker: "Camiones Cisterna Gas/Líquido (Todas)",
+                    otobus: "Límites de Autobuses y Carga (TEM)",
+                    tuneller: "Límites EDS de Túnel Eurasia y Dolmabahce"
+                },
+                destTxt: {
+                    sultanahmet: {name: "Mezquita Sultanahmet", route: "Línea de tranvía T1 estación Sultanahmet.", time: "10 min desde Eminonu"},
+                    galata: {name: "Torre de Gálata", route: "Metro M2 Sishane o caminata desde T1 Karakoy.", time: "15 min desde Taksim"},
+                    topkapi: {name: "Museo del Palacio Topkapi", route: "Tranvía T1 estación Gulhane.", time: "12 min desde Karakoy"},
+                    yerebatan: {name: "Cisterna Basílica", route: "A 2 min a pie del tranvía T1 Sultanahmet.", time: "12 min"},
+                    dolmabahce: {name: "Palacio de Dolmabahce", route: "Tranvía Kabatas o a pie desde Besiktas.", time: "8 min"},
+                    kapalicarsi: {name: "Gran Bazar Histórico", route: "Línea T1 tranvía estación Beyazit.", time: "5 min"},
+                    pierreloti: {name: "Colina Pierre Loti", route: "Teleférico TF2 desde el centro Eyupsultan.", time: "25 min"},
+                    camlica: {name: "Colina Camlica", route: "Autobús 15C desde Uskudar.", time: "30 min"},
+                    rumelihisari: {name: "Fortaleza de Rumeli", route: "Líneas de autobús 25E o 40T hacia Sariyer.", time: "20 min"}
+                },
+                densityData: [
+                    { road: "Puente de los Mártires del 15 de Julio (1ª Vía de Circunvalación)", percentage: 84, color: "#ff4444" },
+                    { road: "Puente Fatih Sultan Mehmet (2ª Vía de Circunvalación)", percentage: 72, color: "#ffaa00" },
+                    { road: "Puente Yavuz Sultan Selim (3ª Vía de Circunvalación)", percentage: 22, color: "#00c851" },
+                    { road: "Eje del Puente de Halic", percentage: 91, color: "#ff4444" },
+                    { road: "Ruta Principal de Metrobús D-100 (E-5)", percentage: 76, color: "#ffaa00" },
+                    { road: "Paso del Túnel de Eurasia (Asia - Europa)", percentage: 35, color: "#00e5ff" }
+                ],
+                hazardsData: [
+                    { title: "⚠️ Alerta de Hielo Negro", text: "Riesgo de heladas en viaductos de la 3ª Vía de Circunvalación por frío nocturno.", loc: "Hadimkoy" },
+                    { title: "💨 Vientos Laterales Fuertes", text: "Rachas fuertes en Puente del 15 de Julio; motos deben tener precaución.", loc: "Entrada 1ª Vía" },
+                    { title: "🧱 Obstáculo en la Calzada", text: "Restos de vehículos en el carril central del Puente de Halic.", loc: "Halic" }
+                ],
+                emergencyData: [{label:'Centro de Emergencias', sub:'112'}, {label:'Asistencia Vial', sub:'159'}],
+                polls: [{id:1, title:"¿Transporte público suficiente?"},{id:2, title:"¿Zona histórica peatonal?"},{id:3, title:"¿Tráfico solucionado?"},{id:4, title:"¿Zonas verdes suficientes?"}]
+            }
+        };
+
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('istanbulClock').innerText = now.toTimeString().split(' ')[0];
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        function toggleTheme() {
+            const body = document.body;
+            const btn = document.getElementById('themeBtn');
+            const isLight = body.getAttribute('data-theme') === 'light';
+            if (isLight) {
+                body.removeAttribute('data-theme');
+                btn.innerText = langData[currentLang].themeGunduz;
+            } else {
+                body.setAttribute('data-theme', 'light');
+                btn.innerText = langData[currentLang].themeGece;
+            }
+        }
+
+        function initLiveCounter() {
+            document.getElementById('liveUserCount').innerText = currentLiveUsers;
+            document.getElementById('toplam-sayac').innerText = formatNumber(dynamicTotalUsers);
+            
+            setInterval(() => {
+                const changeOptions = [-2, -1, 0, 1, 2, 3];
+                const liveChange = changeOptions[Math.floor(Math.random() * changeOptions.length)];
+                currentLiveUsers += liveChange;
+                if (currentLiveUsers < 30) currentLiveUsers = 32;
+                if (currentLiveUsers > 80) currentLiveUsers = 75;
+                if (liveChange > 0) dynamicTotalUsers += liveChange;
+                
+                document.getElementById('liveUserCount').innerText = currentLiveUsers;
+                document.getElementById('toplam-sayac').innerText = formatNumber(dynamicTotalUsers);
+            }, 4000);
+        }
+
+        let rates = { USD: 34.30, EUR: 37.15, GBP: 43.45 };
+        function calculateConversion() {
+            const amount = parseFloat(document.getElementById('convAmount').value) || 0;
+            const type = document.getElementById('convType').value;
+            let result = 0;
+            if (type === "TL_USD") result = amount / rates.USD;
+            else if (type === "TL_EUR") result = amount / rates.EUR;
+            else if (type === "TL_GBP") result = amount / rates.GBP;
+            else if (type === "USD_TL") result = amount * rates.USD;
+            else if (type === "EUR_TL") result = amount * rates.EUR;
+            document.getElementById('convResult').innerText = result.toFixed(2);
+        }
+
+        async function fetchLiveWeather() {
+            try {
+                const response = await fetch('https://api.open-meteo.com/v1/forecast?latitude=41.0082&longitude=28.9784&current_weather=true');
+                const data = await response.json();
+                weatherTempGlobal = Math.round(data.current_weather.temperature);
+                const code = data.current_weather.weathercode;
+                if (code >= 1 && code <= 3) weatherDescCodeGlobal = 1;
+                else if (code >= 45 && code <= 48) weatherDescCodeGlobal = 2;
+                else if (code >= 51 && code <= 67) weatherDescCodeGlobal = 3;
+                else if (code >= 71 && code <= 77) weatherDescCodeGlobal = 4;
+                else if (code >= 80 && code <= 82) weatherDescCodeGlobal = 5;
+                else if (code >= 95) weatherDescCodeGlobal = 6;
+                else weatherDescCodeGlobal = 0;
+            } catch (e) {}
+            renderWeatherDisplay();
+        }
+
+        function renderWeatherDisplay() {
+            let emojis = ["☀️", "⛅", "🌫️", "🌧️", "❄️", "🌧️⛈️", "⛈️"];
+            let emoji = emojis[weatherDescCodeGlobal] || "☀️";
+            document.getElementById('liveWeatherDisplay').innerText = `${emoji} ${weatherTempGlobal}°C, ${langData[currentLang].weatherTxt[weatherDescCodeGlobal]}`;
+        }
+
+        function renderPollsGrid() {
+            const container = document.getElementById('pollsGridContainer');
+            container.innerHTML = '';
+            langData[currentLang].polls.forEach(poll => {
+                container.innerHTML += `
+                    <div class="poll-card" id="poll-card-${poll.id}">
+                        <div class="poll-title">${poll.title}</div>
+                        <div class="poll-actions" id="poll-actions-${poll.id}">
+                            <button class="poll-vote-btn yes" onclick="submitVote(${poll.id}, 'yes')">${langData[currentLang].btnYes}</button>
+                            <button class="poll-vote-btn no" onclick="submitVote(${poll.id}, 'no')">${langData[currentLang].btnNo}</button>
+                        </div>
+                        <div class="poll-results" id="poll-results-${poll.id}">
+                            <div class="poll-bar-container">
+                                <div class="poll-bar yes-bar" id="yes-bar-${poll.id}"></div>
+                                <div class="poll-bar-text" id="yes-text-${poll.id}">${langData[currentLang].labelYes}: 0%</div>
+                            </div>
+                            <div class="poll-bar-container">
+                                <div class="poll-bar no-bar" id="no-bar-${poll.id}"></div>
+                                <div class="poll-bar-text" id="no-text-${poll.id}">${langData[currentLang].labelNo}: 0%</div>
+                            </div>
+                        </div>
+                    </div>`;
+            });
+        }
+
+        function submitVote(pollId, choice) {
+            if(choice === 'yes') pollVotesMemory[pollId].yes += 1;
+            else pollVotesMemory[pollId].no += 1;
+
+            document.getElementById(`poll-actions-${pollId}`).style.display = 'none';
+            document.getElementById(`poll-results-${pollId}`).style.display = 'flex';
+
+            const total = pollVotesMemory[pollId].yes + pollVotesMemory[pollId].no;
+            const yesPercent = Math.round((pollVotesMemory[pollId].yes / total) * 100);
+            const noPercent = 100 - yesPercent;
+
+            setTimeout(() => {
+                document.getElementById(`yes-bar-${pollId}`).style.width = yesPercent + '%';
+                document.getElementById(`no-bar-${pollId}`).style.width = noPercent + '%';
+                document.getElementById(`yes-text-${pollId}`).innerText = `${langData[currentLang].labelYes}: ${yesPercent}%`;
+                document.getElementById(`no-text-${pollId}`).innerText = `${langData[currentLang].labelNo}: ${noPercent}%`;
+            }, 50);
+        }
+
+        function setFeedbackRating(rating) {
+            currentSelectedRating = rating;
+            document.querySelectorAll('.star-rating-control span').forEach((star, index) => {
+                if (index < rating) star.classList.add('selected');
+                else star.classList.remove('selected');
+            });
+        }
+
+        // Akıllı Dil ve Çevir Butonlu Eleştiri Akışı Sistemi
+        function renderCommentsFeed() {
+            const container = document.getElementById('commentsFeedContainer');
+            container.innerHTML = '';
+            multiLangComments.forEach(comment => {
+                const starString = "★".repeat(comment.stars) + "☆".repeat(5 - comment.stars);
+                
+                // Yorum metni orijinal hangi dilde yazıldıysa ilk olarak o dilde listelenir
+                const originalText = comment.text[comment.origLang];
+                
+                container.innerHTML += `
+                    <div class="comment-item">
+                        <div class="comment-header">
+                            <span class="comment-user">${comment.flag} ${comment.name}</span>
+                            <span class="comment-stars">${starString}</span>
+                        </div>
+                        <p class="comment-text" id="comm-text-${comment.id}">${originalText}</p>
+                        <button class="translate-comment-btn" id="tr-btn-${comment.id}" onclick="toggleCommentTranslation(${comment.id})">${langData[currentLang].translateText}</button>
+                    </div>`;
+            });
+        }
+
+        // Metinleri Silmeden Tıklandığında Hedef Dile Döndüren Fonksiyon
+        function toggleCommentTranslation(id) {
+            const targetComment = multiLangComments.find(c => c.id === id);
+            const pElement = document.getElementById(`comm-text-${id}`);
+            const btnElement = document.getElementById(`tr-btn-${id}`);
+            
+            if (btnElement.getAttribute('data-translated') === 'true') {
+                // Geri orijinal dile döndür
+                pElement.innerText = targetComment.text[targetComment.origLang];
+                btnElement.innerText = langData[currentLang].translateText;
+                btnElement.removeAttribute('data-translated');
+            } else {
+                // Seçili olan hedef üst dile tercüme et
+                pElement.innerText = targetComment.text[currentLang] || targetComment.text['en'] || targetComment.text['tr'];
+                btnElement.innerText = langData[currentLang].originalText;
+                btnElement.setAttribute('data-translated', 'true');
+            }
+        }
+
+        function handleFeedbackSubmit(event) {
+            event.preventDefault();
+            const nameInput = document.getElementById('fbName');
+            const commentInput = document.getElementById('fbComment');
+            if (currentSelectedRating === 0) {
+                alert("Lütfen eleştiriniz için yıldız puanı seçiniz!");
+                return;
+            }
+            
+            const userCommentNode = {
+                id: Date.now(),
+                name: nameInput.value,
+                flag: "👤",
+                stars: currentSelectedRating,
+                text: { tr: commentInput.value, en: commentInput.value, de: commentInput.value, es: commentInput.value },
+                origLang: currentLang
+            };
+
+            multiLangComments.unshift(userCommentNode);
+            nameInput.value = ''; commentInput.value = ''; setFeedbackRating(0);
+            renderCommentsFeed();
+        }
+
+        // Yoğunluk Çubukları Renderı
+        function renderDensityBars() {
+            const container = document.getElementById('densityBarsContainer');
+            container.innerHTML = '';
+            langData[currentLang].densityData.forEach(item => {
+                container.innerHTML += `
+                    <div style="margin-bottom: 15px;">
+                        <span style="font-size:0.85rem; font-weight:500; color:var(--text-sub);">${item.road}</span>
+                        <span class="density-text" style="color:${item.color};">%${item.percentage}</span>
+                        <div class="density-bar-container">
+                            <div class="density-bar" style="width:${item.percentage}%; background-color:${item.color};"></div>
+                        </div>
+                    </div>`;
+            });
+        }
+
+        // Sürpriz Karayolu Tehlikeleri Modülü Renderı
+        function renderRoadHazards() {
+            const container = document.getElementById('roadHazardsContainer');
+            container.innerHTML = '';
+            langData[currentLang].hazardsData.forEach(hazard => {
+                container.innerHTML += `
+                    <div class="alert-card danger-road">
+                        <div class="alert-icon">⚠️</div>
+                        <div class="alert-details">
+                            <h4 style="color: #e53935;">${hazard.title}</h4>
+                            <p>${hazard.text}</p>
+                            <span class="alert-location" style="color:#ffaa00;">📍 ${hazard.loc}</span>
+                        </div>
+                    </div>`;
+            });
+        }
+
+        // Genişletilmiş Hız Limitleri Değer Havuzu (UKOME & Karayolları Mevzuatı)
+        const speedLimitsValues = {
+            'otoyol': { legal: 130, penalty: 143 },
+            'bolunmus': { legal: 110, penalty: 121 },
+            'yerlesim': { legal: 50, penalty: 55 },
+            'tanker': { legal: 60, penalty: 66 },
+            'otobus': { legal: 100, penalty: 110 },
+            'tuneller': { legal: 70, penalty: 77 }
+        };
+
+        function rebuildRoadSelect() {
+            const roadSelect = document.getElementById('roadTypeSelect');
+            const currentVal = roadSelect.value || 'otoyol';
+            roadSelect.innerHTML = '';
+            for (let key in langData[currentLang].roadTxt) {
+                roadSelect.innerHTML += `<option value="${key}">${langData[currentLang].roadTxt[key]}</option>`;
+            }
+            roadSelect.value = currentVal;
+            checkSpeedLimit();
+        }
+
+        function checkSpeedLimit() {
+            const selected = document.getElementById('roadTypeSelect').value;
+            document.getElementById('legalSpeed').innerText = speedLimitsValues[selected].legal + " km/s";
+            document.getElementById('penaltySpeed').innerText = speedLimitsValues[selected].penalty + " km/s";
+        }
+
+        function rebuildPlannerSelect() {
+            const destSelect = document.getElementById('plannerDest');
+            const currentVal = destSelect.value || 'sultanahmet';
+            destSelect.innerHTML = '';
+            for (let key in langData[currentLang].destTxt) {
+                destSelect.innerHTML += `<option value="${key}">${langData[currentLang].destTxt[key].name}</option>`;
+            }
+            destSelect.value = currentVal;
+        }
+
+        function calculateRoute() {
+            const selected = document.getElementById('plannerDest').value;
+            const resBox = document.getElementById('plannerResult');
+            const currentDestData = langData[currentLang].destTxt[selected];
+            resBox.style.display = 'block';
+            resBox.innerHTML = `
+                <div class="route-detail-title">${langData[currentLang].routePre} ${currentDestData.name}</div>
+                <div class="route-info-badge">${langData[currentLang].routeOptTime} ${currentDestData.time}</div>
+                <p style="font-size:0.9rem; color: var(--text-sub);"><strong>${langData[currentLang].routeLabel}</strong> ${currentDestData.route}</p>`;
+        }
+
+        function renderEmergencyGrid() {
+            const emGrid = document.getElementById('emergencyGrid');
+            emGrid.innerHTML = '';
+            const nums = ['112', '159'];
+            langData[currentLang].emergencyData.forEach((em, index) => {
+                emGrid.innerHTML += `
+                    <a href="tel:${nums[index]}" class="emergency-card">
+                        <div class="emergency-num">${nums[index]}</div>
+                        <div class="emergency-label">${em.label}</div>
+                        <div class="emergency-sublabel">${em.sub}</div>
+                    </a>`;
+            });
+        }
+
+        function changeLanguage(lang) {
+            if (!langData[lang]) return;
+            currentLang = lang;
+
+            document.getElementById('slideWelcome').innerText = langData[lang].welcome;
+            document.getElementById('slideCityName').innerText = langData[lang].cityName;
+            document.getElementById('slideMainDesc').innerText = langData[lang].mainDesc;
+            document.getElementById('slideLoveTitle').innerText = langData[lang].loveTitle;
+            document.getElementById('slideSubDesc').innerText = langData[lang].subDesc;
+            document.getElementById('lblLangSelect').innerText = langData[lang].lblLangSelect;
+            
+            const themeBtn = document.getElementById('themeBtn');
+            themeBtn.innerText = document.body.getAttribute('data-theme') === 'light' ? langData[lang].themeGece : langData[lang].themeGunduz;
+
+            document.getElementById('lblTotalCounter').innerText = langData[lang].totalCounter;
+            document.getElementById('lblLiveCounter').innerHTML = `${langData[lang].liveCounterPre}<span id="liveUserCount">${currentLiveUsers}</span>${langData[lang].liveCounterPost}`;
+            document.getElementById('statHistory').innerText = langData[lang].statHistory;
+            document.getElementById('statDistricts').innerText = langData[lang].statDistricts;
+            document.getElementById('statArea').innerText = langData[lang].statArea;
+            document.getElementById('lblPop').innerText = langData[lang].lblPop;
+            
+            document.getElementById('lblDensityTitle').innerText = langData[lang].lblDensityTitle;
+            document.getElementById('valDensity').innerHTML = langData[lang].valDensity;
+
+            document.getElementById('lblAltitude').innerText = langData[lang].lblAltitude;
+            document.getElementById('valAltitude').innerText = langData[lang].valAltitude;
+            document.getElementById('lblPost').innerText = langData[lang].lblPost;
+            document.getElementById('lblPhone').innerText = langData[lang].lblPhone;
+            document.getElementById('lblWeatherTitle').innerText = langData[lang].lblWeatherTitle;
+            renderWeatherDisplay();
+
+            // Trafik ve Yol Tehlikeleri Dil Senkronu
+            document.getElementById('trafficTitle').innerText = langData[lang].trafficTitle;
+            document.getElementById('trafficSubtitle').innerText = langData[lang].trafficSubtitle;
+            document.getElementById('subheadDensity').innerText = langData[lang].subheadDensity;
+            document.getElementById('subheadHazards').innerText = langData[lang].subheadHazards;
+            renderDensityBars();
+            renderRoadHazards();
+
+            document.getElementById('institutionsTitle').innerText = langData[lang].institutionsTitle;
+            document.getElementById('ibbBtnText').innerText = langData[lang].ibbBtnText;
+            document.getElementById('instGovTitle').innerText = langData[lang].instGovTitle;
+            document.getElementById('instGovName').innerText = langData[lang].instGovName;
+            document.getElementById('instPoliceTitle').innerText = langData[lang].instPoliceTitle;
+            document.getElementById('instPoliceName').innerText = langData[lang].instPoliceName;
+            document.getElementById('instCultureTitle').innerText = langData[lang].instCultureTitle;
+            document.getElementById('instCultureName').innerText = langData[lang].instCultureName;
+
+            document.getElementById('emergencyTitle').innerText = langData[lang].emergencyTitle;
+            document.getElementById('emergencySubtitle').innerText = langData[lang].emergencySubtitle;
+            renderEmergencyGrid();
+
+            document.getElementById('mapTitle').innerText = langData[lang].mapTitle;
+            document.getElementById('mapSubtitle').innerText = langData[lang].mapSubtitle;
+            document.getElementById('edsTitle').innerText = langData[lang].edsTitle;
+            document.getElementById('edsSubtitle').innerText = langData[lang].edsSubtitle;
+            document.getElementById('speedCheckerTitle').innerText = langData[lang].speedCheckerTitle;
+            document.getElementById('lblLegalSpeed').innerText = langData[lang].lblLegalSpeed;
+            document.getElementById('lblPenaltySpeed').innerText = langData[lang].lblPenaltySpeed;
+            rebuildRoadSelect();
+
+            document.getElementById('plannerTitle').innerText = langData[lang].plannerTitle;
+            document.getElementById('plannerSubtitle').innerText = langData[lang].plannerSubtitle;
+            document.getElementById('plannerBtn').innerText = langData[lang].plannerBtn;
+            rebuildPlannerSelect();
+
+            document.getElementById('pollMainTitle').innerText = langData[lang].pollMainTitle;
+            renderPollsGrid();
+            renderCommentsFeed(); // Çeviri buton başlıklarını tazeleyerek akışı günceller
+
+            document.getElementById('feedbackMainTitle').innerText = langData[lang].feedbackMainTitle;
+            document.getElementById('feedbackSubtitle').innerText = langData[lang].feedbackSubtitle;
+            document.getElementById('lblGiveStars').innerText = langData[lang].lblGiveStars;
+            document.getElementById('fbName').placeholder = langData[lang].fbNamePlaceholder;
+            document.getElementById('fbComment').placeholder = langData[lang].fbCommentPlaceholder;
+            document.getElementById('fbSubmitBtn').innerText = langData[lang].fbSubmitBtn;
+            document.getElementById('lblFooterRights').innerText = langData[lang].lblFooterRights;
+            document.getElementById('lblFooterCredit').innerText = langData[lang].lblFooterCredit;
+        }
+
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const dots = document.querySelectorAll('.dot');
+
+        function showSlide(index) {
+            if(slides.length === 0) return;
+            slides[currentSlide].classList.remove('active');
+            dots[currentSlide].classList.remove('active');
+            currentSlide = (index + slides.length) % slides.length;
+            slides[currentSlide].classList.add('active');
+            dots[currentSlide].classList.add('active');
+        }
+
+        function currentSlideTo(index) { showSlide(index); }
+        setInterval(() => { showSlide(currentSlide + 1); }, 5000);
+
+        window.addEventListener('DOMContentLoaded', () => {
+            initLiveCounter();
+            fetchLiveWeather();
+            renderEmergencyGrid();
+            rebuildRoadSelect();
+            rebuildPlannerSelect();
+            renderPollsGrid();
+            renderCommentsFeed();
+            renderDensityBars();  
+            renderRoadHazards();  
+            calculateConversion();
+        });
+    </script>
+</body>
+</html>
